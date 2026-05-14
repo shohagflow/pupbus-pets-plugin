@@ -2,6 +2,8 @@
  * Pupbus Pets — full layout + colors (no Tailwind scan needed for PHP templates).
  * Reference: login/register mockups — orange header, light blue page, coral CTA.
  */
+@import url('https://fonts.googleapis.com/css2?family=Quicksand:wght@300..700&family=Roboto:wght@100;300;400;500;700;900&display=swap');
+
 :root {
   --pupbus-bg-sky: #d9f1ff;
   --pupbus-orange-header: #f98d48;
@@ -127,6 +129,7 @@
   opacity: 0.65 !important;
   cursor: not-allowed !important;
 }
+
 .pupbus-pets-auth-shell {
   max-width: 28rem;
   margin: 0 auto;
@@ -140,7 +143,7 @@
 }
 
 .pupbus-pets-auth-header {
-  background:#F4B41A;
+  background: #F4B41A;
   padding: 2rem 1.75rem 2.25rem;
   text-align: center;
 }
@@ -1042,4 +1045,375 @@
   box-sizing: border-box;
   display: block !important;
   line-height: 1.5 !important;
+}
+
+/* ---------- Apply Now Form ---------- */
+.pupbus-pets-apply-shell {
+  max-width: 704px;
+  margin: 0 auto;
+  font-family: 'Quicksand', sans-serif;
+}
+
+.pupbus-pets-apply-card {
+  overflow: hidden;
+  border-radius: 24px;
+  background: #fff;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.1);
+  padding: 48px;
+  width: 100%;
+  box-sizing: border-box;
+  min-height: 1183.875px;
+}
+
+.pupbus-pets-apply-header {
+  margin-bottom: 1.5rem;
+}
+
+.pupbus-pets-apply-title {
+  margin: 0;
+  font-family: 'Quicksand', sans-serif;
+  font-size: 28px;
+  font-weight: 600;
+  line-height: 36.4px;
+  letter-spacing: 0px;
+  color: #3F3F3F;
+  padding-bottom: 0.75rem;
+  border-bottom: 2px solid #FDBB2480;
+}
+
+.pupbus-pets-apply-form {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.pupbus-pets-apply-section {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.pupbus-pets-apply-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+}
+
+@media (max-width: 640px) {
+  .pupbus-pets-apply-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.pupbus-pets-apply-field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.625rem;
+}
+
+.pupbus-pets-apply-label {
+  font-family: 'Roboto', sans-serif;
+  font-size: 16px;
+  font-weight: 600;
+  line-height: 25.6px;
+  letter-spacing: 0px;
+  color: #3F3F3F;
+}
+
+.pupbus-pets-apply-field input {
+  box-sizing: border-box;
+  width: 100%;
+  border: 1px solid #e2e8f0;
+  border-radius: 16.4px;
+  padding: 0 1.125rem;
+  font-size: 0.9375rem;
+  background: #fff;
+  transition: border-color 0.15s, box-shadow 0.15s;
+  outline: none;
+  color: #1a202c;
+  height: 53.59375px;
+  display: block;
+}
+
+.pupbus-pets-apply-field textarea {
+  box-sizing: border-box;
+  width: 100%;
+  border: 1px solid #e2e8f0;
+  border-radius: 16.4px;
+  padding: 0.875rem 1.125rem;
+  font-size: 0.9375rem;
+  background: #fff;
+  transition: border-color 0.15s, box-shadow 0.15s;
+  outline: none;
+  color: #1a202c;
+  min-height: 8rem;
+}
+
+.pupbus-pets-apply-field select {
+  box-sizing: border-box;
+  width: 100%;
+  border: 1px solid #e2e8f0;
+  border-radius: 16.4px;
+  padding: 0 1.125rem;
+  font-size: 0.9375rem;
+  background: #fff;
+  transition: border-color 0.15s, box-shadow 0.15s;
+  outline: none;
+  color: #1a202c;
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='%23333' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 1rem center;
+  background-size: 1.25rem;
+  padding-right: 3rem;
+  height: 53.59375px;
+  line-height: 53.59375px;
+  display: block;
+}
+
+.pupbus-pets-apply-field input::placeholder,
+.pupbus-pets-apply-field textarea::placeholder {
+  font-family: 'Roboto', sans-serif;
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 100%;
+  letter-spacing: 0px;
+  color: #94a3b8;
+}
+
+.pupbus-pets-apply-field input:focus,
+.pupbus-pets-apply-field select:focus,
+.pupbus-pets-apply-field textarea:focus {
+  border-color: #f58d82;
+  box-shadow: 0 0 0 3px rgba(245, 141, 130, 0.2);
+}
+
+.pupbus-pets-apply-divider {
+  margin: 0.5rem 0;
+  height: 0;
+}
+
+.pupbus-pets-apply-footer {
+  margin-top: 1rem;
+  text-align: center;
+}
+
+.pupbus-pets-apply-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.625rem;
+  width: 100%;
+  max-width: 24rem;
+  border: none;
+  border-radius: 9999px;
+  background: #EF9A9A;
+  color: #fff;
+  font-family: 'Roboto', sans-serif;
+  font-size: 18px;
+  font-weight: 700;
+  line-height: 28px;
+  letter-spacing: 0px;
+  text-align: center;
+  padding: 1rem 1.5rem;
+  cursor: pointer;
+  box-shadow: 0 10px 15px -3px rgba(239, 154, 154, 0.4);
+  transition: all 0.2s ease;
+}
+
+.pupbus-pets-apply-btn:hover {
+  background: #E57373;
+  transform: translateY(-1px);
+  box-shadow: 0 12px 20px -3px rgba(239, 154, 154, 0.5);
+}
+
+.pupbus-pets-apply-btn:active {
+  transform: translateY(0);
+}
+
+.pupbus-pets-apply-disclaimer {
+  margin-top: 1.25rem;
+  font-family: 'Roboto', sans-serif;
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 20px;
+  letter-spacing: 0px;
+  text-align: center;
+  color: #3F3F3F;
+}
+
+.pupbus-pets-apply-select-wrap {
+  position: relative;
+}
+
+/* ---------- Application Success View ---------- */
+.pupbus-pets-apply-card--success {
+  text-align: center;
+  padding: 48px;
+  max-width: 608px;
+  width: 100%;
+  min-height: 596.96875px;
+  margin: 0 auto;
+  border-radius: 24px;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.pupbus-pets-success-icon-wrap {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 2rem;
+}
+
+.pupbus-pets-success-icon {
+  width: 80px;
+  height: 80px;
+  background: #00C853;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 10px 20px rgba(0, 200, 83, 0.3);
+}
+
+.pupbus-pets-success-title {
+  font-family: 'Quicksand', sans-serif;
+  font-size: 40px;
+  font-weight: 700;
+  line-height: 48px;
+  letter-spacing: -0.4px;
+  color: #3F3F3F;
+  margin-bottom: 1.5rem;
+  text-align: center;
+}
+
+.pupbus-pets-success-text {
+  font-family: 'Roboto', sans-serif;
+  font-size: 20px;
+  font-weight: 400;
+  line-height: 27px;
+  letter-spacing: 0px;
+  color: #3F3F3F;
+  margin-bottom: 1rem;
+  max-width: 600px;
+  margin-left: auto;
+  margin-right: auto;
+  text-align: center;
+}
+
+.pupbus-pets-success-next-box {
+  background: #FFEFD7BF;
+  border-radius: 16px;
+  border: 2px solid transparent;
+  /* Assuming you want the width but maybe a subtle border later */
+  padding: 26px;
+  text-align: left;
+  max-width: 512px;
+  width: 100%;
+  min-height: 216.96875px;
+  margin: 0 auto;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.pupbus-pets-success-next-title {
+  font-family: 'Roboto', sans-serif;
+  font-size: 18px;
+  font-weight: 600;
+  line-height: 30.6px;
+  letter-spacing: 0px;
+  color: #3F3F3F;
+  text-align: center;
+  margin-bottom: 1.5rem;
+}
+
+.pupbus-pets-success-next-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.pupbus-pets-success-next-list li {
+  font-family: 'Roboto', sans-serif;
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 25.6px;
+  letter-spacing: 0px;
+  color: #3F3F3F;
+  margin-bottom: 1rem;
+  padding-left: 1.5rem;
+  position: relative;
+}
+
+.pupbus-pets-success-next-list li::before {
+  content: "•";
+  position: absolute;
+  left: 0;
+  color: #3F3F3F;
+  font-weight: bold;
+}
+
+.pupbus-pets-success-next-list li:last-child {
+  margin-bottom: 0;
+}
+
+@media (max-width: 640px) {
+  .pupbus-pets-apply-card--success {
+    padding: 32px 20px;
+    min-height: auto;
+  }
+
+  .pupbus-pets-success-title {
+    font-size: 32px;
+  }
+
+  .pupbus-pets-success-text {
+    font-size: 16px;
+  }
+
+  .pupbus-pets-success-next-box {
+    padding: 1.5rem;
+    min-height: auto;
+  }
+}
+
+/* ---------- Success Icon Animation ---------- */
+.pupbus-pets-success-icon {
+  animation: pupbus-pop 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+}
+
+.pupbus-pets-success-icon svg path {
+  stroke-dasharray: 100;
+  stroke-dashoffset: 100;
+  animation: pupbus-draw 0.6s ease-out 0.3s forwards;
+}
+
+.pupbus-pets-success-icon svg polyline {
+  stroke-dasharray: 50;
+  stroke-dashoffset: 50;
+  animation: pupbus-draw 0.4s ease-out 0.7s forwards;
+}
+
+@keyframes pupbus-pop {
+  0% {
+    transform: scale(0);
+    opacity: 0;
+  }
+
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+@keyframes pupbus-draw {
+  to {
+    stroke-dashoffset: 0;
+  }
 }

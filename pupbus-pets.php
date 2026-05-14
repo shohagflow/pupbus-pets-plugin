@@ -8,7 +8,7 @@
  */
 
 if (!defined('ABSPATH')) {
-    exit;
+	exit;
 }
 
 define('PUPBUS_PETS_VERSION', '1.0.1');
@@ -17,3 +17,4 @@ define('PUPBUS_PETS_PLUGIN_PATH', plugin_dir_path(__FILE__));
 
 require_once PUPBUS_PETS_PLUGIN_PATH . 'includes/login.php';
 require_once PUPBUS_PETS_PLUGIN_PATH . 'includes/profile.php';
+require_once PUPBUS_PETS_PLUGIN_PATH . 'includes/apply-now.php';
