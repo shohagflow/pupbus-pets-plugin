@@ -1,19 +1,8 @@
 <?php
-/**
- * User profile, pet profiles markup, and related POST handlers.
- *
- * @package Pupbus_Pets
- */
-
 if (!defined('ABSPATH')) {
     exit;
 }
 
-/**
- * Default empty pet row.
- *
- * @return array<string, string>
- */
 function pupbus_pets_default_pet_row(): array
 {
     return array(
@@ -38,10 +27,6 @@ function pupbus_pets_default_pet_row(): array
     );
 }
 
-/**
- * @param int $user_id User ID.
- * @return array<int, array<string, string>>
- */
 function pupbus_pets_get_pets_for_user(int $user_id): array
 {
     $raw = get_user_meta($user_id, 'pupbus_pets_pets_json', true);
@@ -57,19 +42,11 @@ function pupbus_pets_get_pets_for_user(int $user_id): array
     return $data;
 }
 
-/**
- * @param int                               $user_id User ID.
- * @param array<int, array<string, string>> $pets    Pet rows.
- */
 function pupbus_pets_save_pets_for_user(int $user_id, array $pets): void
 {
     update_user_meta($user_id, 'pupbus_pets_pets_json', wp_json_encode($pets));
 }
 
-/**
- * @param array<string, mixed> $row Raw POST row.
- * @return array<string, string>
- */
 function pupbus_pets_sanitize_pet_row(array $row): array
 {
     $defaults = pupbus_pets_default_pet_row();
@@ -201,15 +178,21 @@ function pupbus_pets_handle_logout(): void
         pupbus_pets_redirect_with_message('profile_error');
     }
 
-    wp_logout();
-    pupbus_pets_redirect_with_message('login_success');
+    $user_id = get_current_user_id();
+    
+    wp_clear_auth_cookie();
+    wp_set_current_user(0);
+    
+    do_action('wp_logout', $user_id);
+
+    $current_url = home_url($_SERVER['REQUEST_URI']);
+    $redirect_url = remove_query_arg('pupbus_pets_message', $current_url);
+    $redirect_url = add_query_arg('pupbus_pets_message', 'login_success', $redirect_url);
+    
+    wp_safe_redirect($redirect_url);
+    exit;
 }
 
-/**
- * Logged-in member area markup.
- *
- * @return string
- */
 function pupbus_pets_profile_markup(): string
 {
     $user_id = get_current_user_id();
@@ -240,6 +223,10 @@ function pupbus_pets_profile_markup(): string
     
     if (!$emergency_phone) {
         $emergency_phone = '';
+    }
+
+    if (!$emergency_name) {
+        $emergency_name = '';
     }
 
     $joined = '';
@@ -277,17 +264,31 @@ function pupbus_pets_profile_markup(): string
                         </p>
                     </div>
                 </div>
-                <form method="post" id="pupbus-pets-owner-form">
-                    <?php wp_nonce_field('pupbus_pets_profile_action', 'pupbus_pets_profile_nonce'); ?>
-                    <input type="hidden" name="pupbus_pets_action" value="profile_update">
-                    <button type="submit" class="pupbus-pets-new-profile-edit-btn">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                            <path d="M21.174 6.812a1 1 0 0 0-3.986-3.987L3.842 16.174a2 2 0 0 0-.5.83l-1.321 4.352a.5.5 0 0 0 .623.622l4.353-1.32a2 2 0 0 0 .83-.497z"></path>
-                            <path d="m15 5 4 4"></path>
-                        </svg>
-                        <?php esc_html_e('Edit Profile', 'pupbus-pets'); ?>
-                    </button>
-                </form>
+                <div style="display: flex; gap: 12px;">
+                    <form method="post" id="pupbus-pets-owner-form">
+                        <?php wp_nonce_field('pupbus_pets_profile_action', 'pupbus_pets_profile_nonce'); ?>
+                        <input type="hidden" name="pupbus_pets_action" value="profile_update">
+                        <button type="submit" class="pupbus-pets-new-profile-edit-btn">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                                <path d="M21.174 6.812a1 1 0 0 0-3.986-3.987L3.842 16.174a2 2 0 0 0-.5.83l-1.321 4.352a.5.5 0 0 0 .623.622l4.353-1.32a2 2 0 0 0 .83-.497z"></path>
+                                <path d="m15 5 4 4"></path>
+                            </svg>
+                            <?php esc_html_e('Edit Profile', 'pupbus-pets'); ?>
+                        </button>
+                    </form>
+                    <form method="post">
+                        <?php wp_nonce_field('pupbus_pets_logout_action', 'pupbus_pets_logout_nonce'); ?>
+                        <input type="hidden" name="pupbus_pets_action" value="logout">
+                        <button type="submit" class="pupbus-pets-btn-logout">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                                <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
+                                <polyline points="16 17 21 12 16 7"></polyline>
+                                <line x1="21" y1="12" x2="9" y2="12"></line>
+                            </svg>
+                            <?php esc_html_e('Logout', 'pupbus-pets'); ?>
+                        </button>
+                    </form>
+                </div>
             </div>
 
             <div class="pupbus-pets-new-profile-content">
@@ -337,13 +338,22 @@ function pupbus_pets_profile_markup(): string
                             <input type="text" name="pupbus_pets_home_address" value="<?php echo esc_attr($home_address); ?>" placeholder="<?php esc_attr_e('1234 Oak Street, Austin, TX', 'pupbus-pets'); ?>" required form="pupbus-pets-owner-form">
                         </div>
                     </div>
-                    <div class="pupbus-pets-new-profile-field pupbus-pets-new-profile-field-full">
+                    <div class="pupbus-pets-new-profile-field">
+                        <div class="pupbus-pets-new-profile-field-label">
+                            <?php echo pupbus_pets_icon('user'); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
+                            <?php esc_html_e('Emergency Contact Name', 'pupbus-pets'); ?>
+                        </div>
+                        <div class="pupbus-pets-new-profile-field-value">
+                            <input type="text" name="pupbus_pets_emergency_contact_name" value="<?php echo esc_attr($emergency_name); ?>" placeholder="<?php esc_attr_e('John Doe', 'pupbus-pets'); ?>" form="pupbus-pets-owner-form">
+                        </div>
+                    </div>
+                    <div class="pupbus-pets-new-profile-field">
                         <div class="pupbus-pets-new-profile-field-label">
                             <?php echo pupbus_pets_icon('phone-call'); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
                             <?php esc_html_e('Emergency Contact Phone', 'pupbus-pets'); ?>
                         </div>
                         <div class="pupbus-pets-new-profile-field-value">
-                            <input type="text" name="pupbus_pets_emergency_phone" value="<?php echo esc_attr($emergency_phone); ?>" placeholder="<?php esc_attr_e('(512) 555-0124', 'pupbus-pets'); ?>" required form="pupbus-pets-owner-form">
+                            <input type="text" name="pupbus_pets_emergency_phone" value="<?php echo esc_attr($emergency_phone); ?>" placeholder="<?php esc_attr_e('(512) 555-0124', 'pupbus-pets'); ?>" form="pupbus-pets-owner-form">
                         </div>
                     </div>
                 </div>

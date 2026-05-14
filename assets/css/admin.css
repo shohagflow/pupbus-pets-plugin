@@ -1,0 +1,359 @@
+.pupbus-pets-admin-wrap {
+    padding: 20px;
+    font-family: 'Roboto', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+}
+
+.pupbus-pets-admin-wrap * {
+    box-sizing: border-box;
+}
+
+.pupbus-pets-admin-header {
+    margin-bottom: 24px;
+}
+
+.pupbus-pets-admin-header h1 {
+    font-family: 'Quicksand', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    font-size: 28px;
+    font-weight: 700;
+    color: #1a202c;
+    margin: 0 0 8px 0;
+}
+
+.pupbus-pets-admin-subtitle {
+    font-size: 14px;
+    color: #64748b;
+    margin: 0;
+}
+
+.pupbus-pets-admin-card {
+    background: #ffffff;
+    border-radius: 16px;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    overflow: hidden;
+}
+
+.pupbus-pets-table-container {
+    overflow-x: auto;
+}
+
+.pupbus-pets-users-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.pupbus-pets-users-table thead {
+    background: #f8fafc;
+}
+
+.pupbus-pets-users-table th {
+    font-family: 'Quicksand', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    font-weight: 700;
+    font-size: 13px;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: #475569;
+    padding: 16px 20px;
+    text-align: left;
+    border-bottom: 1px solid #e2e8f0;
+}
+
+.pupbus-pets-users-table td {
+    padding: 16px 20px;
+    border-bottom: 1px solid #f1f5f9;
+    font-size: 14px;
+    color: #1a202c;
+    vertical-align: middle;
+}
+
+.pupbus-pets-users-table tbody tr:hover {
+    background: #f8fafc;
+}
+
+.pupbus-pets-cell-id {
+    font-family: 'Quicksand', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    font-weight: 700;
+    color: #94a3b8;
+}
+
+.pupbus-pets-cell-name {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.pupbus-pets-avatar img {
+    border-radius: 50%;
+    display: block;
+}
+
+.pupbus-pets-pet-badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 28px;
+    height: 28px;
+    padding: 0 8px;
+    border-radius: 9999px;
+    background: #fef3c7;
+    color: #92400e;
+    font-family: 'Quicksand', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    font-weight: 700;
+    font-size: 13px;
+}
+
+.pupbus-pets-cell-actions {
+    display: flex;
+    gap: 8px;
+}
+
+.pupbus-pets-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 14px;
+    border-radius: 8px;
+    border: none;
+    font-family: 'Quicksand', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    font-weight: 600;
+    font-size: 13px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    text-decoration: none;
+}
+
+.pupbus-pets-btn-view {
+    background: #dbeafe;
+    color: #1d4ed8;
+}
+
+.pupbus-pets-btn-view:hover {
+    background: #bfdbfe;
+}
+
+.pupbus-pets-btn-delete {
+    background: #fee2e2;
+    color: #dc2626;
+}
+
+.pupbus-pets-btn-delete:hover {
+    background: #fecaca;
+}
+
+.pupbus-pets-btn-cancel {
+    background: #f1f5f9;
+    color: #475569;
+}
+
+.pupbus-pets-btn-cancel:hover {
+    background: #e2e8f0;
+}
+
+.pupbus-pets-btn-confirm-delete {
+    background: #dc2626;
+    color: #ffffff;
+}
+
+.pupbus-pets-btn-confirm-delete:hover {
+    background: #b91c1c;
+}
+
+.pupbus-pets-modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 99998;
+    display: none;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.pupbus-pets-modal-overlay.active {
+    display: block;
+    opacity: 1;
+}
+
+.pupbus-pets-modal {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) scale(0.95);
+    background: #ffffff;
+    border-radius: 16px;
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+    z-index: 99999;
+    max-width: 700px;
+    width: 90%;
+    max-height: 85vh;
+    overflow-y: auto;
+    display: none;
+    opacity: 0;
+    transition: all 0.3s ease;
+}
+
+.pupbus-pets-modal.active {
+    display: block;
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1);
+}
+
+.pupbus-pets-modal-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 20px 24px;
+    border-bottom: 1px solid #e2e8f0;
+    position: sticky;
+    top: 0;
+    background: #ffffff;
+    z-index: 1;
+}
+
+.pupbus-pets-modal-header h2 {
+    font-family: 'Quicksand', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    font-weight: 700;
+    font-size: 20px;
+    color: #1a202c;
+    margin: 0;
+}
+
+.pupbus-pets-modal-close {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    border: none;
+    background: #f1f5f9;
+    color: #475569;
+    font-size: 24px;
+    line-height: 1;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s ease;
+}
+
+.pupbus-pets-modal-close:hover {
+    background: #e2e8f0;
+}
+
+.pupbus-pets-modal-content {
+    padding: 24px;
+}
+
+.pupbus-pets-modal-delete .pupbus-pets-modal-content {
+    text-align: center;
+    padding: 40px 32px;
+}
+
+.pupbus-pets-delete-icon {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    background: #fee2e2;
+    color: #dc2626;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 24px;
+}
+
+.pupbus-pets-modal-delete h2 {
+    font-family: 'Quicksand', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    font-weight: 700;
+    font-size: 22px;
+    color: #1a202c;
+    margin: 0 0 12px;
+}
+
+.pupbus-pets-modal-delete p {
+    font-size: 15px;
+    color: #64748b;
+    margin: 0 0 32px;
+    line-height: 1.6;
+}
+
+.pupbus-pets-modal-actions {
+    display: flex;
+    gap: 12px;
+    justify-content: center;
+}
+
+.pupbus-pets-user-details-grid {
+    display: grid;
+    gap: 20px;
+}
+
+.pupbus-pets-detail-row {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.pupbus-pets-detail-label {
+    font-family: 'Quicksand', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    font-weight: 700;
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: #94a3b8;
+}
+
+.pupbus-pets-detail-value {
+    font-size: 15px;
+    color: #1a202c;
+}
+
+.pupbus-pets-pets-section {
+    margin-top: 32px;
+    padding-top: 24px;
+    border-top: 1px solid #e2e8f0;
+}
+
+.pupbus-pets-pets-section h3 {
+    font-family: 'Quicksand', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    font-weight: 700;
+    font-size: 18px;
+    color: #1a202c;
+    margin: 0 0 16px;
+}
+
+.pupbus-pets-pet-card {
+    background: #f8fafc;
+    border-radius: 12px;
+    padding: 20px;
+    margin-bottom: 12px;
+}
+
+.pupbus-pets-pet-card:last-child {
+    margin-bottom: 0;
+}
+
+.pupbus-pets-pet-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 16px;
+}
+
+.pupbus-pets-pet-name {
+    font-family: 'Quicksand', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    font-weight: 700;
+    font-size: 17px;
+    color: #1a202c;
+    margin: 0;
+}
+
+.pupbus-pets-pet-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px;
+}
+
+@media (max-width: 640px) {
+    .pupbus-pets-pet-grid {
+        grid-template-columns: 1fr;
+    }
+}

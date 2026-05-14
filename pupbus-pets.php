@@ -24,3 +24,7 @@ function pupbus_pets_enqueue_assets() {
 
 require_once PUPBUS_PETS_PLUGIN_PATH . 'includes/login.php';
 require_once PUPBUS_PETS_PLUGIN_PATH . 'includes/profile.php';
+
+if (is_admin()) {
+    require_once PUPBUS_PETS_PLUGIN_PATH . 'admin/user.php';
+}

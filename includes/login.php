@@ -201,6 +201,13 @@ function pupbus_pets_auth_form_markup(): string
                                 </div>
                             </div>
                             <div class="pupbus-pets-form-field">
+                                <label class="pupbus-pets-form-label" for="pupbus-pets-reg-em-name"><?php esc_html_e('Emergency Contact Name', 'pupbus-pets'); ?></label>
+                                <div class="pupbus-pets-input-wrapper">
+                                    <?php echo pupbus_pets_icon('user'); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
+                                    <input id="pupbus-pets-reg-em-name" type="text" name="pupbus_pets_emergency_contact_name" placeholder="<?php esc_attr_e('John Doe', 'pupbus-pets'); ?>">
+                                </div>
+                            </div>
+                            <div class="pupbus-pets-form-field">
                                 <label class="pupbus-pets-form-label" for="pupbus-pets-reg-em"><?php esc_html_e('Emergency Contact Phone', 'pupbus-pets'); ?></label>
                                 <div class="pupbus-pets-input-wrapper">
                                     <?php echo pupbus_pets_icon('phone-call'); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
@@ -255,6 +262,7 @@ function pupbus_pets_handle_register(): void
     $neighborhood = pupbus_pets_get_post_value('pupbus_pets_neighborhood');
     $home_address = pupbus_pets_get_post_value('pupbus_pets_home_address');
     $emergency_phone = pupbus_pets_get_post_value('pupbus_pets_emergency_phone');
+    $emergency_name = pupbus_pets_get_post_value('pupbus_pets_emergency_contact_name');
 
     if (!$name || !$email || strlen($password) < 6 || email_exists($email)) {
         pupbus_pets_redirect_with_message('register_error');
@@ -291,6 +299,7 @@ function pupbus_pets_handle_register(): void
     update_user_meta($user_id, 'pupbus_pets_neighborhood', $neighborhood);
     update_user_meta($user_id, 'pupbus_pets_home_address', $home_address);
     update_user_meta($user_id, 'pupbus_pets_emergency_phone', $emergency_phone);
+    update_user_meta($user_id, 'pupbus_pets_emergency_contact_name', $emergency_name);
 
     // Auto login the user
     wp_set_current_user($user_id);
@@ -334,6 +343,10 @@ function pupbus_pets_handle_login(): void
     if (is_wp_error($signon)) {
         pupbus_pets_redirect_with_message('login_error');
     }
+
+    wp_set_current_user($user->ID);
+    wp_set_auth_cookie($user->ID, $remember, is_ssl());
+    do_action('wp_login', $user->user_login, $user);
 
     pupbus_pets_redirect_with_message('login_success');
 }
