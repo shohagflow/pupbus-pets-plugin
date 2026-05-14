@@ -68,23 +68,7 @@ function pupbus_pets_get_post_value(string $key): string
     return sanitize_text_field(wp_unslash($_POST[$key]));
 }
 
-function pupbus_pets_enqueue_assets(): void
-{
-    wp_enqueue_style(
-        'pupbus-pets-style',
-        PUPBUS_PETS_PLUGIN_URL . 'assets/css/pupbus-pets.css',
-        array(),
-        PUPBUS_PETS_VERSION
-    );
 
-    wp_enqueue_script(
-        'pupbus-pets-script',
-        PUPBUS_PETS_PLUGIN_URL . 'assets/js/pupbus-pets.js',
-        array(),
-        PUPBUS_PETS_VERSION,
-        true
-    );
-}
 
 /**
  * Inline SVG icons.
@@ -224,7 +208,7 @@ function pupbus_pets_auth_form_markup(): string
                                 </div>
                             </div>
 
-                            <button type="submit" class="pupbus-pets-register-btn"><?php esc_html_e('Join the Pup Crew', 'pupbus-pets'); ?></button>
+                            <button type="submit" class="pupbus-pets-register-btn"><?php esc_html_e('Registration', 'pupbus-pets'); ?></button>
                         </form>
 
                         <p class="pupbus-pets-auth-footer-link">
@@ -244,8 +228,6 @@ function pupbus_pets_auth_form_markup(): string
 
 function pupbus_pets_portal_shortcode(): string
 {
-    pupbus_pets_enqueue_assets();
-
     ob_start();
     ?>
     <section class="pupbus-pets-wrapper pupbus-pets-portal-section">
