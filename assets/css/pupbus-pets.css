@@ -1,0 +1,1045 @@
+/**
+ * Pupbus Pets — full layout + colors (no Tailwind scan needed for PHP templates).
+ * Reference: login/register mockups — orange header, light blue page, coral CTA.
+ */
+:root {
+  --pupbus-bg-sky: #d9f1ff;
+  --pupbus-orange-header: #f98d48;
+  --pupbus-orange-header-end: #f39c12;
+  --pupbus-coral: #f58d82;
+  --pupbus-coral-hover: #e8787c;
+  --pupbus-text-dark: #1a202c;
+  --pupbus-text-muted: #64748b;
+  --pupbus-label-coral: #c97c54;
+  --pupbus-field-bg: #f1f5f9;
+  --pupbus-tab-active: #f98d48;
+  --pupbus-pink-banner: #f472b6;
+  --pupbus-pink-banner-end: #ec4899;
+  --pupbus-yellow-dark: #e5a820;
+}
+
+.pupbus-pets-wrapper {
+  font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto,
+    "Helvetica Neue", Arial, sans-serif;
+  color: var(--pupbus-text-dark);
+}
+
+.pupbus-pets-portal-section {
+  min-height: 80vh;
+  padding: 2.5rem 1rem;
+}
+
+.pupbus-pets-wrapper input:focus,
+.pupbus-pets-wrapper button:focus {
+  outline: none;
+}
+
+.pupbus-pets-hidden {
+  display: none !important;
+}
+
+/* ---------- Registration form styling ---------- */
+.pupbus-pets-register-wrap {
+  padding: 2rem;
+}
+
+.pupbus-pets-register-form {
+  display: flex;
+  flex-direction: column;
+  gap: 0.875rem;
+}
+
+.pupbus-pets-form-field {
+  margin: 0;
+}
+
+.pupbus-pets-form-label {
+  display: block !important;
+  margin-bottom: 0.375rem !important;
+  font-size: 0.875rem !important;
+  font-weight: 700 !important;
+  color: var(--pupbus-text-dark) !important;
+}
+
+.pupbus-pets-input-wrapper {
+  position: relative !important;
+  display: block !important;
+}
+
+.pupbus-pets-input-wrapper svg {
+  position: absolute !important;
+  left: 0.75rem !important;
+  top: 50% !important;
+  transform: translateY(-50%) !important;
+  width: 1.25rem !important;
+  height: 1.25rem !important;
+  color: #94a3b8 !important;
+  pointer-events: none !important;
+  z-index: 10 !important;
+}
+
+.pupbus-pets-input-wrapper input {
+  box-sizing: border-box !important;
+  width: 100% !important;
+  max-width: 100% !important;
+  border-radius: 9999px !important;
+  border: 1px solid #e2e8f0 !important;
+  background: #fff !important;
+  padding: 0.75rem 1rem 0.75rem 2.75rem !important;
+  font-size: 0.875rem !important;
+  color: var(--pupbus-text-dark) !important;
+  transition: border-color 0.15s, box-shadow 0.15s !important;
+  outline: none !important;
+  display: block !important;
+}
+
+.pupbus-pets-input-wrapper input::placeholder {
+  color: #94a3b8 !important;
+}
+
+.pupbus-pets-input-wrapper input:focus {
+  border-color: var(--pupbus-orange-header) !important;
+  box-shadow: 0 0 0 2px rgba(249, 141, 72, 0.30) !important;
+}
+
+.pupbus-pets-register-btn {
+  margin-top: 0.5rem !important;
+  display: block !important;
+  width: 100% !important;
+  box-sizing: border-box !important;
+  border: none !important;
+  border-radius: 9999px !important;
+  background: var(--pupbus-coral) !important;
+  color: #fff !important;
+  font-weight: 700 !important;
+  font-size: 1rem !important;
+  padding: 0.875rem 1rem !important;
+  cursor: pointer !important;
+  box-shadow: 0 10px 20px -6px rgba(245, 141, 130, 0.55) !important;
+  transition: background 0.15s, opacity 0.15s !important;
+}
+
+.pupbus-pets-register-btn:hover:not(:disabled) {
+  opacity: 0.9 !important;
+}
+
+.pupbus-pets-register-btn:disabled {
+  opacity: 0.65 !important;
+  cursor: not-allowed !important;
+}
+.pupbus-pets-auth-shell {
+  max-width: 28rem;
+  margin: 0 auto;
+}
+
+.pupbus-pets-auth-card {
+  overflow: hidden;
+  border-radius: 1.5rem;
+  background: #fff;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.18);
+}
+
+.pupbus-pets-auth-header {
+  background:#F4B41A;
+  padding: 2rem 1.75rem 2.25rem;
+  text-align: center;
+}
+
+.pupbus-pets-auth-dog {
+  font-size: 2.25rem;
+  line-height: 1;
+}
+
+.pupbus-pets-auth-title {
+  margin: 0.5rem 0 0;
+  font-size: 1.75rem;
+  font-weight: 800;
+  color: var(--pupbus-text-dark);
+  line-height: 1.2;
+}
+
+.pupbus-pets-auth-subtitle {
+  margin: 0.5rem 0 0;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: rgba(26, 32, 44, 0.88);
+  line-height: 1.45;
+}
+
+.pupbus-pets-auth-body {
+  padding: 1.75rem 1.75rem 2rem;
+}
+
+.pupbus-pets-auth-form-stack {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.pupbus-pets-auth-form-stack--register {
+  gap: 0.875rem;
+}
+
+.pupbus-pets-auth-row-between {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem 1rem;
+  font-size: 0.875rem;
+}
+
+.pupbus-pets-remember {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  cursor: pointer;
+  color: var(--pupbus-text-muted);
+}
+
+.pupbus-pets-remember input[type="checkbox"] {
+  width: 1rem;
+  height: 1rem;
+  accent-color: var(--pupbus-orange-header);
+  border-radius: 0.25rem;
+}
+
+.pupbus-pets-auth-footer-link {
+  margin: 1.25rem 0 0;
+  text-align: center;
+  font-size: 0.875rem;
+  color: var(--pupbus-text-dark);
+}
+
+.pupbus-pets-auth-tabs {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.25rem;
+  margin-top: 1.5rem;
+  padding: 0.25rem;
+  border-radius: 9999px;
+  background: rgba(148, 163, 184, 0.35);
+}
+
+.pupbus-pets-tab-btn {
+  border: none;
+  cursor: pointer;
+  border-radius: 9999px;
+  padding: 0.5rem 1rem;
+  font-size: 0.875rem;
+  font-weight: 700;
+  color: #334155;
+  background: transparent;
+  transition: background 0.15s ease, color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.pupbus-pets-tab-btn.is-active {
+  background: var(--pupbus-tab-active);
+  color: #fff;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.12);
+}
+
+/* Alerts */
+.pupbus-pets-notice {
+  margin: 1rem 1.25rem 0;
+  border-radius: 0.75rem;
+  border: 1px solid;
+  padding: 0.75rem 1rem;
+  font-size: 0.875rem;
+  font-weight: 600;
+}
+
+.pupbus-pets-notice--success {
+  border-color: #a7f3d0;
+  background: #ecfdf5;
+  color: #047857;
+}
+
+.pupbus-pets-notice--error {
+  border-color: #fecaca;
+  background: #fef2f2;
+  color: #b91c1c;
+}
+
+/* Fields */
+.pupbus-pets-field {
+  margin: 0;
+}
+
+.pupbus-pets-field-label {
+  display: block;
+  margin-bottom: 0.375rem;
+  font-size: 0.875rem;
+  font-weight: 700;
+  color: var(--pupbus-text-dark);
+}
+
+.pupbus-pets-input-wrap {
+  position: relative;
+}
+
+.pupbus-pets-input-wrap svg {
+  position: absolute;
+  left: 0.75rem;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 1.25rem;
+  height: 1.25rem;
+  color: #94a3b8;
+  pointer-events: none;
+}
+
+.pupbus-pets-input-wrap input {
+  box-sizing: border-box;
+  width: 100%;
+  max-width: 100%;
+  border-radius: 9999px;
+  border: 1px solid #e2e8f0;
+  background: #fff;
+  padding: 0.75rem 1rem 0.75rem 2.75rem;
+  font-size: 0.875rem;
+  color: var(--pupbus-text-dark);
+  transition: border-color 0.15s, box-shadow 0.15s;
+  outline: none;
+}
+
+.pupbus-pets-input-wrap input::placeholder {
+  color: #94a3b8;
+}
+
+.pupbus-pets-input-wrap input:focus {
+  border-color: var(--pupbus-orange-header);
+  box-shadow: 0 0 0 2px rgba(249, 141, 72, 0.30);
+}
+
+.pupbus-pets-btn-coral {
+  display: block;
+  width: 100%;
+  box-sizing: border-box;
+  border: none;
+  border-radius: 9999px;
+  background: var(--pupbus-coral);
+  color: #fff;
+  font-weight: 700;
+  font-size: 1rem;
+  padding: 0.875rem 1rem;
+  cursor: pointer;
+  box-shadow: 0 10px 20px -6px rgba(245, 141, 130, 0.55);
+  transition: background 0.15s, opacity 0.15s;
+}
+
+.pupbus-pets-btn-coral:hover:not(:disabled) {
+  background: var(--pupbus-coral-hover);
+}
+
+.pupbus-pets-btn-coral:disabled {
+  opacity: 0.65;
+  cursor: not-allowed;
+}
+
+.pupbus-pets-link-coral {
+  background: none;
+  border: none;
+  padding: 0;
+  margin-left: 0.25rem;
+  font-weight: 700;
+  color: var(--pupbus-coral);
+  text-decoration: underline;
+  cursor: pointer;
+  font-size: inherit;
+  font-family: inherit;
+}
+
+.pupbus-pets-forgot {
+  font-weight: 700;
+  color: var(--pupbus-coral);
+  text-decoration: none;
+  font-size: 0.875rem;
+}
+
+.pupbus-pets-forgot:hover {
+  text-decoration: underline;
+}
+
+/* ---------- Profile area ---------- */
+.pupbus-pets-profile-wrap {
+  max-width: 56rem;
+  margin: 0 auto;
+  padding: 0 0.25rem;
+}
+
+.pupbus-pets-profile-hero {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.pupbus-pets-profile-heading {
+  margin: 1rem 0 0;
+  font-size: clamp(1.875rem, 5vw, 3rem);
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  color: #0f172a;
+}
+
+.pupbus-pets-profile-lead {
+  margin: 0.5rem 0 0;
+  font-size: 1rem;
+  color: var(--pupbus-text-muted);
+  line-height: 1.5;
+}
+
+.pupbus-pets-profile-badge {
+  display: inline-block;
+  border-radius: 9999px;
+  background: #fef3c7;
+  color: #92400e;
+  padding: 0.35rem 1rem;
+  font-size: 0.65rem;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.pupbus-pets-topbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  margin-bottom: 1.5rem;
+  padding: 0.75rem 1rem;
+  border-radius: 1rem;
+  background: #fbbf24;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.08);
+}
+
+@media (min-width: 640px) {
+  .pupbus-pets-topbar {
+    padding: 0.75rem 1.5rem;
+  }
+}
+
+.pupbus-pets-topbar-left {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.pupbus-pets-topbar-icon {
+  font-size: 1.5rem;
+  line-height: 1;
+}
+
+.pupbus-pets-topbar-title {
+  margin: 0;
+  font-size: 0.75rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: rgba(15, 23, 42, 0.85);
+}
+
+.pupbus-pets-topbar-sub {
+  margin: 0.1rem 0 0;
+  font-size: 0.625rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: rgba(15, 23, 42, 0.55);
+}
+
+.pupbus-pets-topbar-right {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.pupbus-pets-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  border-radius: 9999px;
+  background: #fff;
+  padding: 0.35rem 1rem;
+  font-size: 0.875rem;
+  font-weight: 700;
+  color: #0f172a;
+}
+
+.pupbus-pets-pill--desktop {
+  display: none;
+}
+
+@media (min-width: 640px) {
+  .pupbus-pets-pill--desktop {
+    display: inline-flex;
+  }
+}
+
+.pupbus-pets-btn-logout {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  border: none;
+  border-radius: 9999px;
+  background: #0f172a;
+  color: #fff;
+  padding: 0.5rem 1rem;
+  font-size: 0.875rem;
+  font-weight: 700;
+  cursor: pointer;
+  font-family: inherit;
+  transition: background 0.15s;
+}
+
+.pupbus-pets-btn-logout:hover {
+  background: #1e293b;
+}
+
+.pupbus-pets-inline {
+  display: inline;
+}
+
+.pupbus-pets-mb-lg {
+  margin-bottom: 2.5rem;
+}
+
+.pupbus-pets-mt-md {
+  margin-top: 1rem;
+}
+
+.pupbus-pets-mt-lg {
+  margin-top: 1.5rem;
+}
+
+.pupbus-pets-profile-card {
+  overflow: hidden;
+  border-radius: 1.5rem;
+  background: #fff;
+  box-shadow: 0 20px 40px -12px rgba(0, 0, 0, 0.12);
+}
+
+.pupbus-pets-profile-card-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  background: linear-gradient(180deg,
+      var(--pupbus-orange-header) 0%,
+      #f9b92b 100%);
+  padding: 1.25rem 1.5rem;
+}
+
+.pupbus-pets-profile-card-head-left {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 1rem;
+}
+
+.pupbus-pets-profile-avatar {
+  width: 3rem;
+  height: 3rem;
+  border-radius: 9999px;
+  background: #fff;
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+}
+
+.pupbus-pets-profile-avatar svg {
+  width: 1.75rem;
+  height: 1.75rem;
+  color: var(--pupbus-yellow-dark);
+}
+
+.pupbus-pets-profile-title-block h3 {
+  margin: 0;
+  font-size: 1.375rem;
+  font-weight: 800;
+  color: var(--pupbus-text-dark);
+}
+
+.pupbus-pets-profile-title-block p {
+  margin: 0.15rem 0 0;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: rgba(26, 32, 44, 0.75);
+}
+
+.pupbus-pets-btn-save-profile {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  border: none;
+  border-radius: 9999px;
+  background: #fff;
+  padding: 0.5rem 1rem;
+  font-size: 0.875rem;
+  font-weight: 700;
+  color: #0f172a;
+  cursor: pointer;
+  font-family: inherit;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.06);
+}
+
+.pupbus-pets-btn-save-profile:hover {
+  background: #f8fafc;
+}
+
+.pupbus-pets-profile-grid {
+  display: grid;
+  gap: 1.25rem;
+  padding: 1.5rem;
+  grid-template-columns: 1fr;
+}
+
+@media (min-width: 640px) {
+  .pupbus-pets-profile-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+.pupbus-pets-span-2 {
+  grid-column: 1 / -1;
+}
+
+.pupbus-pets-grid-2 {
+  display: grid;
+  gap: 0.75rem;
+  grid-template-columns: 1fr;
+}
+
+@media (min-width: 640px) {
+  .pupbus-pets-grid-2 {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+.pupbus-pets-grid-2--tight {
+  gap: 0.75rem;
+}
+
+.pupbus-pets-grid-3 {
+  display: grid;
+  gap: 0.75rem;
+  grid-template-columns: 1fr;
+}
+
+@media (min-width: 768px) {
+  .pupbus-pets-grid-3 {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+.pupbus-pets-row-label {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  margin-bottom: 0.35rem;
+  font-size: 0.7rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  color: var(--pupbus-label-coral);
+}
+
+.pupbus-pets-row-label svg {
+  width: 0.875rem;
+  height: 0.875rem;
+  flex-shrink: 0;
+}
+
+.pupbus-pets-value-box {
+  border-radius: 0.75rem;
+  background: var(--pupbus-field-bg);
+  padding: 0.65rem 1rem;
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--pupbus-text-dark);
+  min-height: 2.75rem;
+  display: flex;
+  align-items: center;
+  box-sizing: border-box;
+}
+
+.pupbus-pets-value-box--static {
+  opacity: 0.9;
+}
+
+.pupbus-pets-value-box input,
+.pupbus-pets-value-box textarea {
+  width: 100%;
+  border: none;
+  background: transparent;
+  font: inherit;
+  color: inherit;
+  padding: 0;
+  resize: vertical;
+  min-height: 2.5rem;
+  box-sizing: border-box;
+}
+
+.pupbus-pets-value-box--textarea {
+  min-height: 4.5rem;
+  align-items: flex-start;
+  padding-top: 0.65rem;
+  padding-bottom: 0.65rem;
+}
+
+.pupbus-pets-value-box textarea {
+  min-height: 3.5rem;
+}
+
+.pupbus-pets-value-box input:focus,
+.pupbus-pets-value-box textarea:focus {
+  outline: none;
+}
+
+/* Pet section */
+.pupbus-pets-pet-section {
+  overflow: hidden;
+  border-radius: 1.5rem;
+  background: #fff;
+  box-shadow: 0 20px 40px -12px rgba(0, 0, 0, 0.12);
+}
+
+.pupbus-pets-pet-banner {
+  background: linear-gradient(135deg,
+      var(--pupbus-pink-banner) 0%,
+      var(--pupbus-pink-banner-end) 100%);
+  color: #fff;
+  padding: 1rem 1.25rem;
+  border-radius: 1.5rem 1.5rem 0 0;
+}
+
+.pupbus-pets-pet-banner-title {
+  margin: 0;
+  font-size: 1.125rem;
+  font-weight: 800;
+}
+
+.pupbus-pets-pet-banner-text {
+  margin: 0.25rem 0 0;
+  font-size: 0.875rem;
+  font-weight: 500;
+  opacity: 0.95;
+}
+
+.pupbus-pets-pet-section-body {
+  padding: 1.5rem;
+}
+
+.pupbus-pets-pet-card {
+  border: 1px solid #e2e8f0;
+  border-radius: 1rem;
+  overflow: hidden;
+  margin-bottom: 1rem;
+  background: #fff;
+}
+
+.pupbus-pets-pet-card-head {
+  padding: 0.75rem 1rem;
+  background: #fce7f3;
+  border-bottom: 1px solid #fbcfe8;
+}
+
+.pupbus-pets-pet-name {
+  margin: 0;
+  font-weight: 800;
+  color: #0f172a;
+}
+
+.pupbus-pets-pet-meta {
+  margin: 0.15rem 0 0;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: #475569;
+}
+
+.pupbus-pets-btn-remove {
+  border-radius: 9999px;
+  border: 1px solid #fecdd3;
+  background: #fff;
+  padding: 0.35rem 0.75rem;
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: #e11d48;
+  cursor: pointer;
+  font-family: inherit;
+}
+
+.pupbus-pets-btn-remove:hover {
+  background: #fff1f2;
+}
+
+.pupbus-pets-subcard {
+  padding: 1rem;
+  border-bottom: 1px solid #f1f5f9;
+}
+
+.pupbus-pets-subcard:last-child {
+  border-bottom: none;
+}
+
+.pupbus-pets-subcard h4 {
+  margin: 0 0 0.75rem;
+  font-size: 0.8rem;
+  font-weight: 800;
+  color: var(--pupbus-text-dark);
+}
+
+.pupbus-pets-vaccine-badge {
+  display: inline-block;
+  margin-top: 0.25rem;
+  border-radius: 0.375rem;
+  background: #d1fae5;
+  color: #065f46;
+  font-size: 0.7rem;
+  font-weight: 700;
+  padding: 0.2rem 0.5rem;
+}
+
+.pupbus-pets-add-box {
+  border: 2px dashed var(--pupbus-coral);
+  border-radius: 1rem;
+  padding: 2rem 1rem;
+  text-align: center;
+  background: #fff;
+  cursor: pointer;
+  font-family: inherit;
+  transition: background 0.15s;
+}
+
+.pupbus-pets-add-box--full {
+  width: 100%;
+}
+
+.pupbus-pets-add-box:hover {
+  background: #fff7f7;
+}
+
+.pupbus-pets-add-plus {
+  font-size: 2.25rem;
+  font-weight: 300;
+  line-height: 1;
+  color: #fb7185;
+}
+
+.pupbus-pets-add-title {
+  margin: 0.5rem 0 0;
+  font-weight: 800;
+  color: #0f172a;
+}
+
+.pupbus-pets-add-sub {
+  margin: 0.25rem 0 0;
+  font-size: 0.875rem;
+  color: var(--pupbus-text-muted);
+}
+
+.pupbus-pets-copy-footer {
+  margin-top: 2.5rem;
+  text-align: center;
+  font-size: 0.75rem;
+  color: var(--pupbus-text-muted);
+}
+
+/* Flex helpers */
+.pupbus-pets-flex {
+  display: flex;
+}
+
+.pupbus-pets-flex-wrap {
+  flex-wrap: wrap;
+}
+
+.pupbus-pets-items-center {
+  align-items: center;
+}
+
+.pupbus-pets-justify-between {
+  justify-content: space-between;
+}
+
+.pupbus-pets-gap-sm {
+  gap: 0.5rem;
+}
+
+.pupbus-pets-gap-md {
+  gap: 0.75rem;
+}
+
+.pupbus-pets-stack {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.pupbus-pets-text-xl {
+  font-size: 1.25rem;
+  line-height: 1;
+}
+
+.pupbus-pets-text-3xl {
+  font-size: 1.875rem;
+  line-height: 1;
+}
+
+.pupbus-pets-icon-sm {
+  width: 1rem;
+  height: 1rem;
+  flex-shrink: 0;
+}
+
+.pupbus-pets-text-pink {
+  color: #f472b6;
+}
+
+/* ---------- New Profile UI ---------- */
+.pupbus-pets-new-profile-section {
+  margin-top: 2rem;
+  overflow: hidden;
+  border-radius: 1.875rem;
+  background: #fff;
+  box-shadow: 0 20px 40px -12px rgba(0, 0, 0, 0.12);
+}
+
+.pupbus-pets-new-profile-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 1rem;
+  background: #FDBB24;
+  padding: 1.5rem;
+}
+
+.pupbus-pets-new-profile-header-left {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.pupbus-pets-new-profile-avatar {
+  width: 3rem;
+  height: 3rem;
+  border-radius: 9999px;
+  background: #fff;
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+}
+
+.pupbus-pets-new-profile-avatar svg {
+  width: 1.75rem;
+  height: 1.75rem;
+  color: var(--pupbus-yellow-dark);
+}
+
+.pupbus-pets-new-profile-name {
+  margin: 0;
+  font-size: 1.5rem;
+  font-weight: 800;
+  color: var(--pupbus-text-dark);
+}
+
+.pupbus-pets-new-profile-subtitle {
+  margin: 0.25rem 0 0;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: rgba(26, 32, 44, 0.80);
+}
+
+.pupbus-pets-new-profile-edit-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.375rem;
+  border: none;
+  border-radius: 9999px;
+  background: #fff;
+  padding: 0.5rem 1rem;
+  font-size: 0.875rem;
+  font-weight: 700;
+  color: #0f172a;
+  cursor: pointer;
+  font-family: inherit;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.06);
+  transition: background 0.15s;
+}
+
+.pupbus-pets-new-profile-edit-btn svg {
+  width: 1rem;
+  height: 1rem;
+  color: var(--pupbus-coral);
+}
+
+.pupbus-pets-new-profile-edit-btn:hover {
+  background: #f8fafc;
+}
+
+.pupbus-pets-new-profile-content {
+  padding: 1.5rem;
+}
+
+.pupbus-pets-new-profile-grid {
+  display: grid;
+  gap: 1.25rem;
+  grid-template-columns: 1fr;
+}
+
+@media (min-width: 640px) {
+  .pupbus-pets-new-profile-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+.pupbus-pets-new-profile-field-full {
+  grid-column: 1 / -1;
+}
+
+.pupbus-pets-new-profile-field-label {
+  display: flex;
+  align-items: center;
+  gap: 0.375rem;
+  margin-bottom: 0.375rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: #3F3F3F;
+}
+
+.pupbus-pets-new-profile-field-label svg {
+  width: 0.875rem;
+  height: 0.875rem;
+  flex-shrink: 0;
+}
+
+.pupbus-pets-new-profile-field-value {
+  border-radius: 0.75rem;
+  background: var(--pupbus-field-bg);
+  padding: 0.625rem 1rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: #1a202c;
+  min-height: 2.75rem;
+  display: flex;
+  align-items: center;
+  box-sizing: border-box;
+}
+
+.pupbus-pets-new-profile-field-value input {
+  width: 100% !important;
+  border: none !important;
+  background: transparent !important;
+  font-size: 0.875rem !important;
+  font-weight: 500 !important;
+  color: #1a202c !important;
+  padding: 0 !important;
+  outline: none !important;
+  min-height: 2.5rem;
+  box-sizing: border-box;
+  display: block !important;
+  line-height: 1.5 !important;
+}
