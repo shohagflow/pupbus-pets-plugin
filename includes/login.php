@@ -1,6 +1,6 @@
 <?php
 /**
- * Login, registration, notices, assets, shortcode, admin, and auth POST handlers.
+ * Login, registration, notices, assets, shortcode, and auth POST handlers.
  *
  * @package Pupbus_Pets
  */
@@ -301,12 +301,10 @@ function pupbus_pets_handle_register(): void
     update_user_meta($user_id, 'pupbus_pets_emergency_phone', $emergency_phone);
     update_user_meta($user_id, 'pupbus_pets_emergency_contact_name', $emergency_name);
 
-    // Auto login the user
     wp_set_current_user($user_id);
     wp_set_auth_cookie($user_id, true);
     do_action('wp_login', $username, get_user_by('id', $user_id));
 
-    // Redirect to profile page
     $redirect_url = wp_get_referer() ? wp_get_referer() : home_url('/');
     pupbus_pets_redirect_with_message('register_success', $redirect_url);
 }
@@ -382,84 +380,30 @@ function pupbus_pets_handle_actions(): void
     if ('pet_add' === $action) {
         pupbus_pets_handle_pet_add();
     }
+
+    if ('apply_now' === $action) {
+        pupbus_pets_handle_apply_now();
+    }
 }
 add_action('init', 'pupbus_pets_handle_actions');
 
-function pupbus_pets_register_admin_menu(): void
+function pupbus_pets_handle_logout(): void
 {
-    add_menu_page(
-        'Pupbus Pets',
-        'Pupbus Pets',
-        'manage_options',
-        'pupbus-pets',
-        'pupbus_pets_render_admin_page',
-        'dashicons-pets',
-        26
-    );
-}
-add_action('admin_menu', 'pupbus_pets_register_admin_menu');
-
-function pupbus_pets_render_admin_page(): void
-{
-    if (!current_user_can('manage_options')) {
+    if (!isset($_POST['pupbus_pets_logout_nonce']) || !wp_verify_nonce(sanitize_text_field(wp_unslash($_POST['pupbus_pets_logout_nonce'])), 'pupbus_pets_logout_action')) {
         return;
     }
 
-    $shortcode = '[pupbus_pets_portal]';
-    ?>
-    <div class="wrap">
-        <h1><?php esc_html_e('Pupbus Pets', 'pupbus-pets'); ?></h1>
-        <p><?php esc_html_e('Copy this shortcode and paste it into any page to show the login, registration, and profile portal.', 'pupbus-pets'); ?></p>
+    $user_id = get_current_user_id();
+    
+    wp_clear_auth_cookie();
+    wp_set_current_user(0);
+    
+    do_action('wp_logout', $user_id);
 
-        <table class="form-table" role="presentation">
-            <tbody>
-                <tr>
-                    <th scope="row"><label for="pupbus-pets-shortcode"><?php esc_html_e('Portal Shortcode', 'pupbus-pets'); ?></label></th>
-                    <td>
-                        <input
-                            id="pupbus-pets-shortcode"
-                            type="text"
-                            class="regular-text code"
-                            readonly
-                            value="<?php echo esc_attr($shortcode); ?>"
-                        />
-                        <button type="button" class="button button-primary" id="pupbus-pets-copy-btn"><?php esc_html_e('Copy Shortcode', 'pupbus-pets'); ?></button>
-                        <p class="description" id="pupbus-pets-copy-status"><?php esc_html_e('Ready to copy.', 'pupbus-pets'); ?></p>
-                    </td>
-                </tr>
-            </tbody>
-        </table>
-    </div>
-
-    <script>
-        (function () {
-            var copyButton = document.getElementById('pupbus-pets-copy-btn');
-            var shortcodeField = document.getElementById('pupbus-pets-shortcode');
-            var statusLabel = document.getElementById('pupbus-pets-copy-status');
-
-            if (!copyButton || !shortcodeField || !statusLabel) {
-                return;
-            }
-
-            copyButton.addEventListener('click', function () {
-                shortcodeField.select();
-                shortcodeField.setSelectionRange(0, shortcodeField.value.length);
-
-                var copied = false;
-                if (navigator.clipboard && window.isSecureContext) {
-                    navigator.clipboard.writeText(shortcodeField.value).then(function () {
-                        statusLabel.textContent = '<?php echo esc_js(__('Shortcode copied.', 'pupbus-pets')); ?>';
-                    }).catch(function () {
-                        copied = document.execCommand('copy');
-                        statusLabel.textContent = copied ? '<?php echo esc_js(__('Shortcode copied.', 'pupbus-pets')); ?>' : '<?php echo esc_js(__('Copy failed. Please copy manually.', 'pupbus-pets')); ?>';
-                    });
-                    return;
-                }
-
-                copied = document.execCommand('copy');
-                statusLabel.textContent = copied ? '<?php echo esc_js(__('Shortcode copied.', 'pupbus-pets')); ?>' : '<?php echo esc_js(__('Copy failed. Please copy manually.', 'pupbus-pets')); ?>';
-            });
-        })();
-    </script>
-    <?php
+    $current_url = home_url($_SERVER['REQUEST_URI']);
+    $redirect_url = remove_query_arg('pupbus_pets_message', $current_url);
+    $redirect_url = add_query_arg('pupbus_pets_message', 'login_success', $redirect_url);
+    
+    wp_safe_redirect($redirect_url);
+    exit;
 }

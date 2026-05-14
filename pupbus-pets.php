@@ -24,7 +24,35 @@ function pupbus_pets_enqueue_assets() {
 
 require_once PUPBUS_PETS_PLUGIN_PATH . 'includes/login.php';
 require_once PUPBUS_PETS_PLUGIN_PATH . 'includes/profile.php';
+require_once PUPBUS_PETS_PLUGIN_PATH . 'includes/apply-now.php';
 
 if (is_admin()) {
     require_once PUPBUS_PETS_PLUGIN_PATH . 'admin/user.php';
+}
+
+register_activation_hook(__FILE__, 'pupbus_pets_create_applications_table');
+add_action('init', 'pupbus_pets_create_applications_table');
+
+function pupbus_pets_create_applications_table() {
+    global $wpdb;
+    $table_name = $wpdb->prefix . 'pupbus_applications';
+    $charset_collate = $wpdb->get_charset_collate();
+
+    $sql = "CREATE TABLE $table_name (
+        id bigint(20) NOT NULL AUTO_INCREMENT,
+        parent_name varchar(255) NOT NULL,
+        parent_email varchar(255) NOT NULL,
+        parent_phone varchar(50) NOT NULL,
+        neighborhood varchar(255) NOT NULL,
+        dog_name varchar(255) NOT NULL,
+        dog_breed varchar(255) NOT NULL,
+        dog_age varchar(100) NOT NULL,
+        session_preference varchar(50) NOT NULL,
+        pup_notes text,
+        submitted_at datetime DEFAULT CURRENT_TIMESTAMP,
+        PRIMARY KEY  (id)
+    ) $charset_collate;";
+
+    require_once(ABSPATH . 'wp-admin/includes/upgrade.php');
+    dbDelta($sql);
 }

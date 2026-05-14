@@ -169,28 +169,19 @@ function pupbus_pets_handle_profile_update(): void
     update_user_meta($user_id, 'pupbus_pets_emergency_phone', $emergency_phone);
     update_user_meta($user_id, 'pupbus_pets_emergency_contact_name', $emergency_name);
 
-    pupbus_pets_redirect_with_message('profile_saved');
-}
+    if (!empty($_FILES['pupbus_pets_avatar']['name'])) {
+        require_once ABSPATH . 'wp-admin/includes/image.php';
+        require_once ABSPATH . 'wp-admin/includes/file.php';
+        require_once ABSPATH . 'wp-admin/includes/media.php';
 
-function pupbus_pets_handle_logout(): void
-{
-    if (!isset($_POST['pupbus_pets_logout_nonce']) || !wp_verify_nonce(sanitize_text_field(wp_unslash($_POST['pupbus_pets_logout_nonce'])), 'pupbus_pets_logout_action')) {
-        pupbus_pets_redirect_with_message('profile_error');
+        $attachment_id = media_handle_upload('pupbus_pets_avatar', 0);
+
+        if (!is_wp_error($attachment_id)) {
+            update_user_meta($user_id, 'pupbus_pets_avatar_id', $attachment_id);
+        }
     }
 
-    $user_id = get_current_user_id();
-    
-    wp_clear_auth_cookie();
-    wp_set_current_user(0);
-    
-    do_action('wp_logout', $user_id);
-
-    $current_url = home_url($_SERVER['REQUEST_URI']);
-    $redirect_url = remove_query_arg('pupbus_pets_message', $current_url);
-    $redirect_url = add_query_arg('pupbus_pets_message', 'login_success', $redirect_url);
-    
-    wp_safe_redirect($redirect_url);
-    exit;
+    pupbus_pets_redirect_with_message('profile_saved');
 }
 
 function pupbus_pets_profile_markup(): string
@@ -204,6 +195,7 @@ function pupbus_pets_profile_markup(): string
     $home_address = get_user_meta($user_id, 'pupbus_pets_home_address', true);
     $emergency_phone = get_user_meta($user_id, 'pupbus_pets_emergency_phone', true);
     $emergency_name = get_user_meta($user_id, 'pupbus_pets_emergency_contact_name', true);
+    $avatar_id = get_user_meta($user_id, 'pupbus_pets_avatar_id', true);
 
     if (!$name) {
         $name = $user->display_name;
@@ -234,7 +226,13 @@ function pupbus_pets_profile_markup(): string
         $joined = date_i18n('F Y', strtotime($user->user_registered));
     }
 
-    $pets = pupbus_pets_get_pets_for_user($user_id);
+    $avatar_url = '';
+    if ($avatar_id) {
+        $avatar_url = wp_get_attachment_image_url($avatar_id, 'thumbnail');
+    }
+    if (!$avatar_url) {
+        $avatar_url = get_avatar_url($user_id, array('size' => 120));
+    }
 
     ob_start();
     ?>
@@ -245,11 +243,15 @@ function pupbus_pets_profile_markup(): string
             <div class="pupbus-pets-new-profile-header">
                 <div class="pupbus-pets-new-profile-header-left">
                     <div class="pupbus-pets-new-profile-avatar">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                            <path d="M18 20a6 6 0 0 0-12 0"></path>
-                            <circle cx="12" cy="10" r="4"></circle>
-                            <circle cx="12" cy="12" r="10"></circle>
-                        </svg>
+                        <?php if ($avatar_url): ?>
+                            <img src="<?php echo esc_url($avatar_url); ?>" alt="<?php echo esc_attr($name); ?>" style="width: 100%; height: 100%; object-fit: cover; border-radius: 50%;">
+                        <?php else: ?>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                                <path d="M18 20a6 6 0 0 0-12 0"></path>
+                                <circle cx="12" cy="10" r="4"></circle>
+                                <circle cx="12" cy="12" r="10"></circle>
+                            </svg>
+                        <?php endif; ?>
                     </div>
                     <div>
                         <h3 class="pupbus-pets-new-profile-name"><?php echo esc_html($name ?: __('Member', 'pupbus-pets')); ?></h3>
@@ -265,22 +267,18 @@ function pupbus_pets_profile_markup(): string
                     </div>
                 </div>
                 <div style="display: flex; gap: 12px;">
-                    <form method="post" id="pupbus-pets-owner-form">
-                        <?php wp_nonce_field('pupbus_pets_profile_action', 'pupbus_pets_profile_nonce'); ?>
-                        <input type="hidden" name="pupbus_pets_action" value="profile_update">
-                        <button type="submit" class="pupbus-pets-new-profile-edit-btn">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                                <path d="M21.174 6.812a1 1 0 0 0-3.986-3.987L3.842 16.174a2 2 0 0 0-.5.83l-1.321 4.352a.5.5 0 0 0 .623.622l4.353-1.32a2 2 0 0 0 .83-.497z"></path>
-                                <path d="m15 5 4 4"></path>
-                            </svg>
-                            <?php esc_html_e('Edit Profile', 'pupbus-pets'); ?>
-                        </button>
-                    </form>
-                    <form method="post">
+                    <button type="button" class="pupbus-pets-new-profile-edit-btn" id="pupbus-pets-edit-profile-btn">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                            <path d="M21.174 6.812a1 1 0 0 0-3.986-3.987L3.842 16.174a2 2 0 0 0-.5.83l-1.321 4.352a.5.5 0 0 0 .623.622l4.353-1.32a2 2 0 0 0 .83-.497z"></path>
+                            <path d="m15 5 4 4"></path>
+                        </svg>
+                        <?php esc_html_e('Edit Profile', 'pupbus-pets'); ?>
+                    </button>
+                    <form method="post" style="margin: 0;">
                         <?php wp_nonce_field('pupbus_pets_logout_action', 'pupbus_pets_logout_nonce'); ?>
                         <input type="hidden" name="pupbus_pets_action" value="logout">
                         <button type="submit" class="pupbus-pets-btn-logout">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
                                 <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
                                 <polyline points="16 17 21 12 16 7"></polyline>
                                 <line x1="21" y1="12" x2="9" y2="12"></line>
@@ -291,76 +289,107 @@ function pupbus_pets_profile_markup(): string
                 </div>
             </div>
 
-            <div class="pupbus-pets-new-profile-content">
-                <div class="pupbus-pets-new-profile-grid">
-                    <div class="pupbus-pets-new-profile-field">
+            <form method="post" id="pupbus-pets-owner-form" style="margin-top: 0;" enctype="multipart/form-data">
+                <?php wp_nonce_field('pupbus_pets_profile_action', 'pupbus_pets_profile_nonce'); ?>
+                <input type="hidden" name="pupbus_pets_action" value="profile_update">
+
+                <div class="pupbus-pets-new-profile-content">
+                    <div class="pupbus-pets-new-profile-field" style="margin-bottom: 24px;">
                         <div class="pupbus-pets-new-profile-field-label">
-                            <?php echo pupbus_pets_icon('user'); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
-                            <?php esc_html_e('Full Name', 'pupbus-pets'); ?>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                                <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"></path>
+                                <circle cx="12" cy="13" r="4"></circle>
+                            </svg>
+                            <?php esc_html_e('Profile Picture', 'pupbus-pets'); ?>
                         </div>
                         <div class="pupbus-pets-new-profile-field-value">
-                            <input type="text" name="pupbus_pets_name" value="<?php echo esc_attr($name); ?>" placeholder="<?php esc_attr_e('Sarah Johnson', 'pupbus-pets'); ?>" required form="pupbus-pets-owner-form">
+                            <span class="pupbus-pets-profile-view-text"><?php echo $avatar_id ? esc_html__('Uploaded', 'pupbus-pets') : esc_html__('Not uploaded', 'pupbus-pets'); ?></span>
+                            <input type="file" name="pupbus_pets_avatar" accept="image/*" class="pupbus-pets-profile-edit-input">
                         </div>
                     </div>
-                    <div class="pupbus-pets-new-profile-field">
-                        <div class="pupbus-pets-new-profile-field-label">
-                            <?php echo pupbus_pets_icon('mail'); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
-                            <?php esc_html_e('Email Address', 'pupbus-pets'); ?>
+                    <div class="pupbus-pets-new-profile-grid">
+                        <div class="pupbus-pets-new-profile-field">
+                            <div class="pupbus-pets-new-profile-field-label">
+                                <?php echo pupbus_pets_icon('user'); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
+                                <?php esc_html_e('Full Name', 'pupbus-pets'); ?>
+                            </div>
+                            <div class="pupbus-pets-new-profile-field-value">
+                                <span class="pupbus-pets-profile-view-text"><?php echo esc_html($name ?: '-'); ?></span>
+                                <input type="text" name="pupbus_pets_name" value="<?php echo esc_attr($name); ?>" placeholder="<?php esc_attr_e('Sarah Johnson', 'pupbus-pets'); ?>" required class="pupbus-pets-profile-edit-input">
+                            </div>
                         </div>
-                        <div class="pupbus-pets-new-profile-field-value">
-                            <span><?php echo esc_html($user->user_email); ?></span>
+                        <div class="pupbus-pets-new-profile-field">
+                            <div class="pupbus-pets-new-profile-field-label">
+                                <?php echo pupbus_pets_icon('mail'); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
+                                <?php esc_html_e('Email Address', 'pupbus-pets'); ?>
+                            </div>
+                            <div class="pupbus-pets-new-profile-field-value">
+                                <span style="display: inline;"><?php echo esc_html($user->user_email); ?></span>
+                            </div>
+                        </div>
+                        <div class="pupbus-pets-new-profile-field">
+                            <div class="pupbus-pets-new-profile-field-label">
+                                <?php echo pupbus_pets_icon('phone'); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
+                                <?php esc_html_e('Phone Number', 'pupbus-pets'); ?>
+                            </div>
+                            <div class="pupbus-pets-new-profile-field-value">
+                                <span class="pupbus-pets-profile-view-text"><?php echo esc_html($phone ?: '-'); ?></span>
+                                <input type="text" name="pupbus_pets_phone" value="<?php echo esc_attr($phone); ?>" placeholder="<?php esc_attr_e('(512) 555-0123', 'pupbus-pets'); ?>" required class="pupbus-pets-profile-edit-input">
+                            </div>
+                        </div>
+                        <div class="pupbus-pets-new-profile-field">
+                            <div class="pupbus-pets-new-profile-field-label">
+                                <?php echo pupbus_pets_icon('map'); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
+                                <?php esc_html_e('Neighborhood', 'pupbus-pets'); ?>
+                            </div>
+                            <div class="pupbus-pets-new-profile-field-value">
+                                <span class="pupbus-pets-profile-view-text"><?php echo esc_html($neighborhood ?: '-'); ?></span>
+                                <input type="text" name="pupbus_pets_neighborhood" value="<?php echo esc_attr($neighborhood); ?>" placeholder="<?php esc_attr_e('East Austin', 'pupbus-pets'); ?>" required class="pupbus-pets-profile-edit-input">
+                            </div>
+                        </div>
+                        <div class="pupbus-pets-new-profile-field pupbus-pets-new-profile-field-full">
+                            <div class="pupbus-pets-new-profile-field-label">
+                                <?php echo pupbus_pets_icon('home'); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
+                                <?php esc_html_e('Home Address', 'pupbus-pets'); ?>
+                            </div>
+                            <div class="pupbus-pets-new-profile-field-value">
+                                <span class="pupbus-pets-profile-view-text"><?php echo esc_html($home_address ?: '-'); ?></span>
+                                <input type="text" name="pupbus_pets_home_address" value="<?php echo esc_attr($home_address); ?>" placeholder="<?php esc_attr_e('1234 Oak Street, Austin, TX', 'pupbus-pets'); ?>" required class="pupbus-pets-profile-edit-input">
+                            </div>
+                        </div>
+                        <div class="pupbus-pets-new-profile-field">
+                            <div class="pupbus-pets-new-profile-field-label">
+                                <?php echo pupbus_pets_icon('user'); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
+                                <?php esc_html_e('Emergency Contact Name', 'pupbus-pets'); ?>
+                            </div>
+                            <div class="pupbus-pets-new-profile-field-value">
+                                <span class="pupbus-pets-profile-view-text"><?php echo esc_html($emergency_name ?: '-'); ?></span>
+                                <input type="text" name="pupbus_pets_emergency_contact_name" value="<?php echo esc_attr($emergency_name); ?>" placeholder="<?php esc_attr_e('John Doe', 'pupbus-pets'); ?>" class="pupbus-pets-profile-edit-input">
+                            </div>
+                        </div>
+                        <div class="pupbus-pets-new-profile-field">
+                            <div class="pupbus-pets-new-profile-field-label">
+                                <?php echo pupbus_pets_icon('phone-call'); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
+                                <?php esc_html_e('Emergency Contact Phone', 'pupbus-pets'); ?>
+                            </div>
+                            <div class="pupbus-pets-new-profile-field-value">
+                                <span class="pupbus-pets-profile-view-text"><?php echo esc_html($emergency_phone ?: '-'); ?></span>
+                                <input type="text" name="pupbus_pets_emergency_phone" value="<?php echo esc_attr($emergency_phone); ?>" placeholder="<?php esc_attr_e('(512) 555-0124', 'pupbus-pets'); ?>" class="pupbus-pets-profile-edit-input">
+                            </div>
                         </div>
                     </div>
-                    <div class="pupbus-pets-new-profile-field">
-                        <div class="pupbus-pets-new-profile-field-label">
-                            <?php echo pupbus_pets_icon('phone'); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
-                            <?php esc_html_e('Phone Number', 'pupbus-pets'); ?>
-                        </div>
-                        <div class="pupbus-pets-new-profile-field-value">
-                            <input type="text" name="pupbus_pets_phone" value="<?php echo esc_attr($phone); ?>" placeholder="<?php esc_attr_e('(512) 555-0123', 'pupbus-pets'); ?>" required form="pupbus-pets-owner-form">
-                        </div>
-                    </div>
-                    <div class="pupbus-pets-new-profile-field">
-                        <div class="pupbus-pets-new-profile-field-label">
-                            <?php echo pupbus_pets_icon('map'); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
-                            <?php esc_html_e('Neighborhood', 'pupbus-pets'); ?>
-                        </div>
-                        <div class="pupbus-pets-new-profile-field-value">
-                            <input type="text" name="pupbus_pets_neighborhood" value="<?php echo esc_attr($neighborhood); ?>" placeholder="<?php esc_attr_e('East Austin', 'pupbus-pets'); ?>" required form="pupbus-pets-owner-form">
-                        </div>
-                    </div>
-                    <div class="pupbus-pets-new-profile-field pupbus-pets-new-profile-field-full">
-                        <div class="pupbus-pets-new-profile-field-label">
-                            <?php echo pupbus_pets_icon('home'); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
-                            <?php esc_html_e('Home Address', 'pupbus-pets'); ?>
-                        </div>
-                        <div class="pupbus-pets-new-profile-field-value">
-                            <input type="text" name="pupbus_pets_home_address" value="<?php echo esc_attr($home_address); ?>" placeholder="<?php esc_attr_e('1234 Oak Street, Austin, TX', 'pupbus-pets'); ?>" required form="pupbus-pets-owner-form">
-                        </div>
-                    </div>
-                    <div class="pupbus-pets-new-profile-field">
-                        <div class="pupbus-pets-new-profile-field-label">
-                            <?php echo pupbus_pets_icon('user'); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
-                            <?php esc_html_e('Emergency Contact Name', 'pupbus-pets'); ?>
-                        </div>
-                        <div class="pupbus-pets-new-profile-field-value">
-                            <input type="text" name="pupbus_pets_emergency_contact_name" value="<?php echo esc_attr($emergency_name); ?>" placeholder="<?php esc_attr_e('John Doe', 'pupbus-pets'); ?>" form="pupbus-pets-owner-form">
-                        </div>
-                    </div>
-                    <div class="pupbus-pets-new-profile-field">
-                        <div class="pupbus-pets-new-profile-field-label">
-                            <?php echo pupbus_pets_icon('phone-call'); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
-                            <?php esc_html_e('Emergency Contact Phone', 'pupbus-pets'); ?>
-                        </div>
-                        <div class="pupbus-pets-new-profile-field-value">
-                            <input type="text" name="pupbus_pets_emergency_phone" value="<?php echo esc_attr($emergency_phone); ?>" placeholder="<?php esc_attr_e('(512) 555-0124', 'pupbus-pets'); ?>" form="pupbus-pets-owner-form">
-                        </div>
+
+                    <div class="pupbus-pets-profile-edit-actions" style="margin-top: 24px; display: none;">
+                        <button type="submit" class="pupbus-pets-register-btn" style="width: auto; min-width: 150px;">
+                            <?php esc_html_e('Save Changes', 'pupbus-pets'); ?>
+                        </button>
+                        <button type="button" class="pupbus-pets-new-profile-edit-btn" id="pupbus-pets-cancel-edit-btn">
+                            <?php esc_html_e('Cancel', 'pupbus-pets'); ?>
+                        </button>
                     </div>
                 </div>
-            </div>
+            </form>
         </section>
-
-
 
         <p class="pupbus-pets-copy-footer"><?php esc_html_e('© Pupbus Pets · All rights reserved', 'pupbus-pets'); ?></p>
     </div>
